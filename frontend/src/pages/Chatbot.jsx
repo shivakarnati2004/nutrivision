@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { sendChatMessage } from '../services/api';
 import { SplineScene } from '../components/ui/SplineScene';
 import { Spotlight } from '../components/ui/spotlight';
-import { IoRobotOutline } from 'react-icons/io5';
+import { IoChatbubblesOutline } from 'react-icons/io5';
 
 export default function Chatbot() {
     const [messages, setMessages] = useState([
@@ -81,7 +81,7 @@ export default function Chatbot() {
                 <div className="mb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 pointer-events-auto px-4 z-20">
                     <div className="glass-card p-3 flex items-center gap-3 backdrop-blur-md bg-dark-950/60 border border-white/10 rounded-2xl">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 flex items-center justify-center text-xl text-white shadow-lg shadow-primary-500/20">
-                            <IoRobotOutline />
+                            <IoChatbubblesOutline />
                         </div>
                         <div>
                             <h2 className="text-white font-bold tracking-wide text-sm md:text-base">Raju Danger</h2>

@@ -26,7 +26,7 @@
 > Full walkthrough — navigating pages, analyzing food, switching themes, and chatting with the AI coach.
 
 <p align="center">
-  <img src="docs/screenshots/app_walkthrough.webp" alt="NutriVision App Walkthrough" width="800"/>
+  <img src="frontend/public/docs/screenshots/app_walkthrough.webp" alt="NutriVision App Walkthrough" width="800"/>
 </p>
 
 ---
@@ -37,48 +37,48 @@
   <tr>
     <td align="center" width="50%">
       <b>🏠 Home — Light Mode</b><br/>
-      <img src="docs/screenshots/home_light.png" alt="Home Light Mode" width="100%"/>
+      <img src="frontend/public/docs/screenshots/home_light.png" alt="Home Light Mode" width="100%"/>
       <br/><sub>Tri-modal input with quick suggestion chips</sub>
     </td>
     <td align="center" width="50%">
       <b>🌙 Home — Dark Mode</b><br/>
-      <img src="docs/screenshots/home_dark.png" alt="Home Dark Mode" width="100%"/>
+      <img src="frontend/public/docs/screenshots/home_dark.png" alt="Home Dark Mode" width="100%"/>
       <br/><sub>Glassmorphism theme with glowing accents</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
       <b>📷 Image Upload</b><br/>
-      <img src="docs/screenshots/image_upload.png" alt="Image Upload" width="100%"/>
+      <img src="frontend/public/docs/screenshots/image_upload.png" alt="Image Upload" width="100%"/>
       <br/><sub>Drag-and-drop or camera capture</sub>
     </td>
     <td align="center">
       <b>🍟 Nutrition Card</b><br/>
-      <img src="docs/screenshots/nutrition_card.png" alt="Nutrition Analysis Card" width="100%"/>
+      <img src="frontend/public/docs/screenshots/nutrition_card.png" alt="Nutrition Analysis Card" width="100%"/>
       <br/><sub>Full macro/micro breakdown with health score</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
       <b>📊 Dashboard</b><br/>
-      <img src="docs/screenshots/dashboard_data.png" alt="Dashboard" width="100%"/>
+      <img src="frontend/public/docs/screenshots/dashboard.png" alt="Dashboard" width="100%"/>
       <br/><sub>Calorie budget, macro cards, trend charts</sub>
     </td>
     <td align="center">
       <b>🤖 AI Health Coach</b><br/>
-      <img src="docs/screenshots/chatbot.png" alt="AI Chatbot" width="100%"/>
+      <img src="frontend/public/docs/screenshots/chatbot.png" alt="AI Chatbot" width="100%"/>
       <br/><sub>Personalized advice based on your profile</sub>
     </td>
   </tr>
   <tr>
     <td align="center">
       <b>👤 Profile & Body Metrics</b><br/>
-      <img src="docs/screenshots/profile_data.png" alt="Profile" width="100%"/>
+      <img src="frontend/public/docs/screenshots/profile.png" alt="Profile" width="100%"/>
       <br/><sub>BMI, body fat, BMR, TDEE, macro targets</sub>
     </td>
     <td align="center">
       <b>🎬 Landing Animation</b><br/>
-      <img src="docs/screenshots/landing_animation.png" alt="Landing Page" width="100%"/>
+      <img src="frontend/public/docs/screenshots/landing_animation.png" alt="Landing Page" width="100%"/>
       <br/><sub>GSAP scroll-driven canvas animation</sub>
     </td>
   </tr>
@@ -147,7 +147,7 @@ Each analysis returns a detailed card with **calories, protein, carbs, fat, fibe
 | **Styling** | Tailwind CSS 3.4 | Utility-first responsive design |
 | **Animations** | Framer Motion + GSAP | Page transitions, scroll animations |
 | **Charts** | Recharts | Dashboard data visualization |
-| **Backend** | Express 5 + Node.js | RESTful API server |
+| **Backend** | Express 5 + Node.js | RESTful API backend |
 | **AI** | Google Gemini (multi-model cascade) | Food recognition, nutrition extraction, chat |
 | **Database** | PostgreSQL 14+ | Users, analysis history, OTPs |
 | **Auth** | JWT + bcryptjs | Stateless token authentication |
@@ -161,7 +161,7 @@ Each analysis returns a detailed card with **calories, protein, carbs, fat, fibe
 ```
 nutrivision/
 │
-├── client/                         # ── React Frontend (Vite) ──────────
+├── frontend/                         # ── React Frontend (Vite) ──────────
 │   ├── public/
 │   │   ├── logo.jpg
 │   │   └── sequence/               # Landing animation frames (140 frames)
@@ -190,7 +190,7 @@ nutrivision/
 │   │   │   ├── Profile.jsx          # User profile & body metrics
 │   │   │   └── Signup.jsx           # OTP-verified registration
 │   │   ├── services/
-│   │   │   └── api.js               # Axios HTTP client
+│   │   │   └── api.js               # Axios HTTP frontend
 │   │   ├── App.jsx                  # Root component + routing
 │   │   ├── index.css                # Global styles + Tailwind
 │   │   └── main.jsx                 # React DOM entry point
@@ -199,7 +199,7 @@ nutrivision/
 │   ├── tailwind.config.js
 │   └── package.json
 │
-├── server/                          # ── Express Backend ────────────────
+├── backend/                          # ── Express Backend ────────────────
 │   ├── config/
 │   │   └── db.js                    # PostgreSQL pool + auto-migration
 │   ├── middleware/
@@ -212,7 +212,7 @@ nutrivision/
 │   ├── services/
 │   │   ├── email.js                 # Nodemailer OTP templates
 │   │   └── gemini.js                # Gemini AI — model cascade + retry
-│   ├── server.js                    # Express entry + CORS + static serving
+│   ├── backend.js                    # Express entry + CORS + static serving
 │   └── package.json
 │
 ├── docs/screenshots/                # App screenshots for README
@@ -229,7 +229,7 @@ nutrivision/
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                   CLIENT (React 19 + Vite 7)                    │
+│                   frontend (React 19 + Vite 7)                    │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌────────────────┐  │
 │  │  Pages   │  │Components│  │ Context  │  │   Services     │  │
 │  │----------│  │----------│  │----------│  │----------------│  │
@@ -245,7 +245,7 @@ nutrivision/
                                │ HTTP/REST (Axios)
                                ▼
 ┌─────────────────────────────────────────────────────────────────┐
-│                  SERVER (Express 5 + Node.js)                   │
+│                  backend (Express 5 + Node.js)                   │
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────────────┐  │
 │  │   Routes     │  │  Middleware   │  │     Services         │  │
 │  │--------------│  │--------------│  │----------------------│  │
@@ -289,10 +289,10 @@ cd nutrivision
 ### 2. Configure Environment
 
 ```bash
-cp .env.example server/.env
+cp .env.example backend/.env
 ```
 
-Edit `server/.env`:
+Edit `backend/.env`:
 
 ```env
 GEMINI_API_KEY=your_gemini_api_key
@@ -311,14 +311,14 @@ EMAIL_FROM=your_email@gmail.com
 
 ```bash
 # Install dependencies
-npm --prefix server install
-npm --prefix client install
+npm --prefix backend install
+npm --prefix frontend install
 
 # Terminal 1 — Start backend (port 3001)
-npm --prefix server start
+npm --prefix backend start
 
-# Terminal 2 — Start frontend dev server (port 5173)
-npm --prefix client run dev
+# Terminal 2 — Start frontend dev backend (port 5173)
+npm --prefix frontend run dev
 ```
 
 ### 4. Verify
@@ -337,7 +337,7 @@ npm --prefix client run dev
 ### Health Check
 
 ```
-GET /api/health                        # Server + DB status (no auth)
+GET /api/health                        # backend + DB status (no auth)
 ```
 
 ### Authentication
@@ -382,7 +382,7 @@ POST /api/chat                    🔒   # Chat with AI health coach
 
 ## 🧪 Database Schema
 
-Tables are auto-created on server startup — no manual migration needed.
+Tables are auto-created on backend startup — no manual migration needed.
 
 ```sql
 CREATE TABLE users (
@@ -457,10 +457,10 @@ The repo includes `render.yaml` for one-click deployment on [Render](https://ren
 
 ```bash
 # Build frontend
-npm --prefix client run build
+npm --prefix frontend run build
 
-# The server serves the built files in production mode
-NODE_ENV=production npm --prefix server start
+# The backend serves the built files in production mode
+NODE_ENV=production npm --prefix backend start
 ```
 
 ---

@@ -12,13 +12,13 @@ node_modules/
 .env.development
 .env.production
 .env.*.local
-server/.env
+backend/.env
 
 # === Build Outputs ===
 dist/
 build/
-client/dist/
-client/build/
+frontend/dist/
+frontend/build/
 
 # === Logs ===
 *.log

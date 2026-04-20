@@ -5,8 +5,8 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node server.js",
-    "build": "cd ../client && npm install && npm run build",
-    "render-build": "npm install && cd ../client && npm install && npm run build",
+    "build": "cd ../frontend && npm install && npm run build",
+    "render-build": "npm install && cd ../frontend && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "engines": {
