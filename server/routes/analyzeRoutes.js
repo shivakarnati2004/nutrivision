@@ -34,8 +34,13 @@ router.post('/image', upload.single('image'), async (req, res) => {
             data: nutritionData,
         });
     } catch (error) {
-        console.error('Image analysis error:', error);
-        res.status(500).json({ error: error.message || 'Failed to analyze image' });
+        console.error('Image analysis error:', error.message);
+        const isOverloaded = error.message.includes('busy') || error.message.includes('503');
+        res.status(isOverloaded ? 503 : 500).json({
+            error: isOverloaded
+                ? 'AI is temporarily busy. Please try again in a few seconds.'
+                : (error.message || 'Failed to analyze image'),
+        });
     }
 });
 
@@ -55,8 +60,13 @@ router.post('/text', async (req, res) => {
             data: nutritionData,
         });
     } catch (error) {
-        console.error('Text analysis error:', error);
-        res.status(500).json({ error: error.message || 'Failed to analyze text' });
+        console.error('Text analysis error:', error.message);
+        const isOverloaded = error.message.includes('busy') || error.message.includes('503');
+        res.status(isOverloaded ? 503 : 500).json({
+            error: isOverloaded
+                ? 'AI is temporarily busy. Please try again in a few seconds.'
+                : (error.message || 'Failed to analyze text'),
+        });
     }
 });
 
@@ -76,8 +86,13 @@ router.post('/speech', async (req, res) => {
             data: nutritionData,
         });
     } catch (error) {
-        console.error('Speech analysis error:', error);
-        res.status(500).json({ error: error.message || 'Failed to analyze speech' });
+        console.error('Speech analysis error:', error.message);
+        const isOverloaded = error.message.includes('busy') || error.message.includes('503');
+        res.status(isOverloaded ? 503 : 500).json({
+            error: isOverloaded
+                ? 'AI is temporarily busy. Please try again in a few seconds.'
+                : (error.message || 'Failed to analyze speech'),
+        });
     }
 });
 

@@ -10,15 +10,6 @@ export default function TextInput({ onAnalyze, isLoading }) {
         }
     };
 
-    const suggestions = [
-        '🍎 1 Apple',
-        '🍚 1 Cup Rice',
-        '🥗 Caesar Salad',
-        '🍕 2 Slices Pizza',
-        '🥑 1 Avocado',
-        '🍳 2 Boiled Eggs',
-    ];
-
     return (
         <div className="animate-fade-in space-y-6">
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -61,25 +52,6 @@ export default function TextInput({ onAnalyze, isLoading }) {
                     )}
                 </button>
             </form>
-
-            {/* Quick Suggestions */}
-            <div className="space-y-3">
-                <p className="text-xs text-dark-400 uppercase tracking-wider font-medium">Quick suggestions</p>
-                <div className="flex flex-wrap gap-2">
-                    {suggestions.map((suggestion) => (
-                        <button
-                            key={suggestion}
-                            onClick={() => { setText(suggestion); }}
-                            className="bg-white/5 border border-white/10 text-sm text-dark-300 px-3 py-1.5 rounded-lg
-                       hover:bg-primary-500/10 hover:border-primary-500/30 hover:text-white
-                       transition-all duration-200"
-                            id={`suggestion-${suggestion.split(' ').pop().toLowerCase()}`}
-                        >
-                            {suggestion}
-                        </button>
-                    ))}
-                </div>
-            </div>
         </div>
     );
 }

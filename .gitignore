@@ -69,13 +69,19 @@ coverage/
 *.local
 *.tsbuildinfo
 
-# === Test/Helper Scripts (optional — keep if useful) ===
-# check_users.js
-# test_api.js
-# test_login.js
-# template_text.txt
-# template_text_utf8.txt
-
-# Project documents
-*.docx
+# === Debug / Test Scripts ===
+check_users.js
+test_api.js
+test_login.js
+server/test_auth.js
 template_text*.txt
+
+# === Lint Output Dumps ===
+eslint_full.*
+eslint_out.*
+
+# === One-off Helper Scripts ===
+copy_frames.cjs
+
+# === Documents ===
+*.docx

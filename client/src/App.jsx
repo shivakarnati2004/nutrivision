@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import GradientMenu from './components/ui/gradient-menu';
+import { IoHomeOutline, IoPieChartOutline, IoChatbubblesOutline, IoPersonOutline, IoCompassOutline } from 'react-icons/io5';
 import { BrowserRouter, Routes, Route, Navigate, NavLink, useLocation, Link } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from './pages/Login';
@@ -15,12 +17,16 @@ import ImageUpload from './components/ImageUpload';
 import TextInput from './components/TextInput';
 import SpeechInput from './components/SpeechInput';
 import NutritionCard from './components/NutritionCard';
+import Home3DAnimation from './components/Home3DAnimation';
+import TubesBackground from './components/TubesBackground';
 import { analyzeImage, analyzeText, analyzeSpeech, saveAnalysis } from './services/api';
 
+import { IoCameraOutline, IoDocumentTextOutline, IoMicOutline, IoNutritionOutline } from 'react-icons/io5';
+
 const tabs = [
-    { id: 'image', label: 'Image', icon: '📷', desc: 'Upload a photo' },
-    { id: 'text', label: 'Text', icon: '📝', desc: 'Type food name' },
-    { id: 'speech', label: 'Speech', icon: '🎙️', desc: 'Speak it' },
+    { id: 'image', label: 'Image', icon: <IoCameraOutline className="text-xl" />, desc: 'Upload a photo' },
+    { id: 'text', label: 'Text', icon: <IoDocumentTextOutline className="text-xl" />, desc: 'Type food name' },
+    { id: 'speech', label: 'Speech', icon: <IoMicOutline className="text-xl" />, desc: 'Speak it' },
 ];
 
 function HomePage() {
@@ -28,30 +34,39 @@ function HomePage() {
     const [nutritionData, setNutritionData] = useState(null);
     const [lastInputType, setLastInputType] = useState('text');
     const [lastInputText, setLastInputText] = useState('');
+    const [lastInputFile, setLastInputFile] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+    const [canRetry, setCanRetry] = useState(false);
     const { isAuthenticated } = useAuth();
 
     const handleAnalyze = async (type, input) => {
         setIsLoading(true);
         setError('');
+        setCanRetry(false);
         setNutritionData(null);
         setLastInputType(type);
+
+        // Store input for retry
+        if (type === 'image') {
+            setLastInputFile(input);
+            setLastInputText(input?.name || 'Image');
+        } else {
+            setLastInputFile(null);
+            setLastInputText(input);
+        }
 
         try {
             let result;
             switch (type) {
                 case 'image':
                     result = await analyzeImage(input);
-                    setLastInputText(input?.name || 'Image');
                     break;
                 case 'text':
                     result = await analyzeText(input);
-                    setLastInputText(input);
                     break;
                 case 'speech':
                     result = await analyzeSpeech(input);
-                    setLastInputText(input);
                     break;
                 default:
                     throw new Error('Invalid analysis type');
@@ -61,13 +76,22 @@ function HomePage() {
                 setNutritionData(result.data);
             } else {
                 setError(result.error || 'Analysis failed');
+                setCanRetry(true);
             }
         } catch (err) {
             console.error('Analysis error:', err);
-            setError(err.response?.data?.error || err.message || 'Failed to analyze. Please try again.');
+            const errMsg = err.response?.data?.error || err.message || 'Failed to analyze. Please try again.';
+            setError(errMsg);
+            setCanRetry(true);
         } finally {
             setIsLoading(false);
         }
+    };
+
+    const handleRetry = () => {
+        if (!lastInputType || isLoading) return;
+        const input = lastInputType === 'image' ? lastInputFile : lastInputText;
+        if (input) handleAnalyze(lastInputType, input);
     };
 
     const handleSave = async (data, weight) => {
@@ -91,21 +115,8 @@ function HomePage() {
 
     return (
         <div className="space-y-6 pb-24">
-            {/* Entry Animation Banner */}
-            <Link to="/landing" className="block">
-                <div className="glass-card p-4 flex items-center justify-between hover:border-primary-500/30 transition-all cursor-pointer group">
-                    <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500/20 to-accent-500/20 flex items-center justify-center text-xl">
-                            🎬
-                        </div>
-                        <div>
-                            <p className="text-sm font-semibold text-dark-800 dark:text-white">Experience NutriVision</p>
-                            <p className="text-xs text-dark-500">Watch the interactive animation</p>
-                        </div>
-                    </div>
-                    <span className="text-primary-500 text-lg group-hover:translate-x-1 transition-transform">→</span>
-                </div>
-            </Link>
+            <Home3DAnimation />
+
             {/* Tab Navigation */}
             <nav className="flex gap-2 p-1.5 glass-card" id="main-tabs">
                 {tabs.map((tab) => (
@@ -153,9 +164,21 @@ function HomePage() {
                                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
                                         d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z" />
                                 </svg>
-                                <div>
+                                <div className="flex-1">
                                     <p className="text-red-400 font-medium text-sm">Analysis Failed</p>
                                     <p className="text-red-400/70 text-xs mt-1">{error}</p>
+                                    {canRetry && (
+                                        <button
+                                            onClick={handleRetry}
+                                            disabled={isLoading}
+                                            className="mt-3 px-4 py-1.5 text-xs font-medium rounded-lg 
+                                                bg-primary-500/20 text-primary-400 border border-primary-500/30 
+                                                hover:bg-primary-500/30 transition-all duration-200"
+                                            id="retry-analysis-btn"
+                                        >
+                                            ↻ Retry Analysis
+                                        </button>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -214,31 +237,16 @@ function BottomNav() {
     if (hideOn.some(path => location.pathname.startsWith(path))) return null;
 
     const navItems = [
-        { to: '/', icon: '🏠', label: 'Home' },
-        { to: '/dashboard', icon: '📊', label: 'Dashboard' },
-        { to: '/chatbot', icon: '🤖', label: 'Raju 🙂' },
-        { to: '/profile', icon: '👤', label: 'Profile' },
-        { to: '/landing', icon: '🎬', label: 'Entry' },
+        { title: 'Home', to: '/', icon: <IoHomeOutline />, gradientFrom: '#56CCF2', gradientTo: '#2F80ED' },
+        { title: 'Dashboard', to: '/dashboard', icon: <IoPieChartOutline />, gradientFrom: '#80FF72', gradientTo: '#7EE8FA' },
+        { title: 'Raju', to: '/chatbot', icon: <IoChatbubblesOutline />, gradientFrom: '#a955ff', gradientTo: '#ea51ff' },
+        { title: 'Profile', to: '/profile', icon: <IoPersonOutline />, gradientFrom: '#FF9966', gradientTo: '#FF5E62' },
+        { title: 'Entry', to: '/landing', icon: <IoCompassOutline />, gradientFrom: '#ffa9c6', gradientTo: '#f434e2' }
     ];
 
     return (
-        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-white/90 dark:bg-dark-950/90 backdrop-blur-xl border-t border-dark-900/10 dark:border-white/5 transition-colors duration-500">
-            <div className="max-w-4xl mx-auto flex">
-                {navItems.map(item => (
-                    <NavLink
-                        key={item.to}
-                        to={item.to}
-                        end={item.to === '/'}
-                        className={({ isActive }) => `flex-1 flex flex-col items-center gap-1 py-3 px-2 text-xs 
-                            transition-all duration-200 ${isActive
-                                ? 'text-primary-400'
-                                : 'text-dark-500 hover:text-dark-300'}`}
-                    >
-                        <span className="text-lg">{item.icon}</span>
-                        <span>{item.label}</span>
-                    </NavLink>
-                ))}
-            </div>
+        <nav className="fixed bottom-4 left-0 right-0 z-50 pointer-events-none">
+            <GradientMenu items={navItems} />
         </nav>
     );
 }
@@ -282,18 +290,20 @@ function AppContent() {
 
 function AppLayout({ children }) {
     const { user } = useAuth();
-    return (
-        <div className="min-h-screen bg-gray-50 dark:bg-dark-950 bg-grid-pattern transition-colors duration-500">
-            <div className="fixed top-0 left-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl pointer-events-none"></div>
-            <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-accent-500/5 rounded-full blur-3xl pointer-events-none"></div>
+    const location = useLocation();
 
-            <div className="relative max-w-4xl mx-auto px-4 py-6">
-                {/* Header */}
-                <header className="flex items-center justify-between mb-6 animate-fade-in">
+    const layoutContent = (
+        <div className="min-h-screen bg-transparent transition-colors duration-500">
+                <div className="fixed top-0 left-1/4 w-96 h-96 bg-primary-500/5 rounded-full blur-3xl pointer-events-none"></div>
+                <div className="fixed bottom-0 right-1/4 w-96 h-96 bg-accent-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div className="relative max-w-4xl mx-auto px-4 py-6 z-10 transition-all pointer-events-none">
+                    {/* Header */}
+                <header className="flex items-center justify-between mb-6 animate-fade-in pointer-events-auto">
                     <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary-500 to-accent-500 
-                                      flex items-center justify-center text-xl shadow-lg shadow-primary-500/20">
-                            🥗
+                                      flex items-center justify-center text-xl shadow-lg shadow-primary-500/20 text-white">
+                            <IoNutritionOutline />
                         </div>
                         <div>
                             <h1 className="text-xl font-black bg-gradient-to-r from-primary-400 via-emerald-400 to-accent-400 
@@ -301,7 +311,7 @@ function AppLayout({ children }) {
                                 NutriVision
                             </h1>
                             <p className="text-dark-500 dark:text-dark-500 text-xs mt-1 font-medium">
-                                {user?.name ? `Hey, ${user.name}! 👋` : 'AI Nutrition Analyzer'}
+                                {user?.name ? `Hey, ${user.name}!` : 'AI Nutrition Analyzer'}
                             </p>
                         </div>
                     </div>
@@ -310,17 +320,27 @@ function AppLayout({ children }) {
                     </div>
                 </header>
 
-                {children}
+                <main className="pointer-events-auto">
+                    {children}
+                </main>
 
                 {/* Footer */}
+                {location.pathname !== '/chatbot' && (
                 <footer className="text-center mt-12 pt-6 pb-20 border-t border-white/5">
                     <p className="text-dark-600 text-xs">
                         NutriVision © 2026 • Made by Shiva Karnati • For informational purposes only
                     </p>
-                </footer>
+                    </footer>
+                )}
             </div>
         </div>
     );
+
+    if (location.pathname === '/chatbot') {
+        return layoutContent;
+    }
+
+    return <TubesBackground>{layoutContent}</TubesBackground>;
 }
 
 function App() {

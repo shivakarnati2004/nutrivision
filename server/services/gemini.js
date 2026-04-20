@@ -2,7 +2,16 @@ const { GoogleGenerativeAI } = require('@google/generative-ai');
 require('dotenv').config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const MODEL_NAME = 'gemini-2.5-flash';
+
+// Model cascade — ordered by preference. If one is overloaded, try the next.
+const MODEL_CASCADE = [
+    'gemini-2.5-flash',
+    'gemini-2.0-flash',
+    'gemini-1.5-flash',
+];
+
+const MAX_RETRIES = 2;
+const BASE_DELAY_MS = 1500;
 
 const NUTRITION_PROMPT = `You are an expert nutritionist AI. Analyze the given food and provide DETAILED nutrition data.
 
@@ -50,21 +59,54 @@ health_score should be 1-100 based on overall nutritional value.
 Be accurate with real nutritional data. Fill in ALL fields with realistic values.`;
 
 /**
- * Extract text parts only (skip thinking parts) from Gemini response
+ * Check if an error is transient (worth retrying).
+ */
+function isTransientError(error) {
+    const msg = error.message || '';
+    return (
+        msg.includes('503') ||
+        msg.includes('429') ||
+        msg.includes('Service Unavailable') ||
+        msg.includes('high demand') ||
+        msg.includes('overloaded') ||
+        msg.includes('RESOURCE_EXHAUSTED') ||
+        msg.includes('fetch failed') ||
+        msg.includes('ECONNRESET') ||
+        msg.includes('timeout') ||
+        msg.includes('ETIMEDOUT') ||
+        msg.includes('network') ||
+        msg.includes('socket hang up')
+    );
+}
+
+/**
+ * Check if the error indicates the model itself is overloaded (should switch model).
+ */
+function isModelOverloaded(error) {
+    const msg = error.message || '';
+    return (
+        msg.includes('503') ||
+        msg.includes('Service Unavailable') ||
+        msg.includes('high demand') ||
+        msg.includes('overloaded') ||
+        msg.includes('RESOURCE_EXHAUSTED') ||
+        msg.includes('429')
+    );
+}
+
+/**
+ * Extract text parts only (skip thinking parts) from Gemini response.
  */
 function getResponseText(response) {
     try {
-        // Try response.text() first
         return response.text();
     } catch (e) {
-        // If text() fails, manually extract from candidates
         try {
             const parts = response.candidates[0].content.parts;
-            const textParts = parts
+            return parts
                 .filter(p => p.text && !p.thought)
                 .map(p => p.text)
                 .join('');
-            return textParts;
         } catch (e2) {
             throw new Error('Could not extract text from Gemini response');
         }
@@ -72,10 +114,10 @@ function getResponseText(response) {
 }
 
 /**
- * Extract JSON object from text that may contain extra content
+ * Extract JSON object from text that may contain extra content.
  */
 function extractJSON(text) {
-    // 1. Try to extract from markdown code block
+    // 1. Try markdown code block extraction
     const codeBlockMatch = text.match(/```(?:json)?\s*\n?([\s\S]*?)\n?\s*```/);
     if (codeBlockMatch) {
         try { return JSON.parse(codeBlockMatch[1].trim()); } catch (e) { /* continue */ }
@@ -95,9 +137,9 @@ function extractJSON(text) {
             if (inString) continue;
             if (ch === '{') depth++;
             if (ch === '}') {
-                depth--; if (depth === 0) {
-                    const jsonStr = text.substring(firstBrace, i + 1);
-                    try { return JSON.parse(jsonStr); } catch (e) { break; }
+                depth--;
+                if (depth === 0) {
+                    try { return JSON.parse(text.substring(firstBrace, i + 1)); } catch (e) { break; }
                 }
             }
         }
@@ -109,53 +151,96 @@ function extractJSON(text) {
     throw new Error('Could not parse nutrition data from API response');
 }
 
-const analyzeImage = async (imageBuffer, mimeType, retries = 2) => {
-    for (let attempt = 0; attempt <= retries; attempt++) {
-        try {
-            const model = genAI.getGenerativeModel({
-                model: MODEL_NAME,
-                generationConfig: {
-                    responseMimeType: 'application/json',
-                },
-            });
+/**
+ * Sleep for a given number of milliseconds.
+ */
+const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-            const imagePart = {
-                inlineData: {
-                    data: imageBuffer.toString('base64'),
-                    mimeType: mimeType,
-                },
-            };
+/**
+ * Execute a Gemini API call with model cascade and retry logic.
+ * Tries each model in the cascade with retries before moving to the next.
+ *
+ * @param {Function} callFn - (modelName) => Promise<result> - The API call to execute
+ * @param {string} label - Label for logging (e.g. "image", "text", "chat")
+ * @returns {Promise<*>} The parsed result
+ */
+async function executeWithCascade(callFn, label) {
+    const errors = [];
 
-            const result = await model.generateContent({
-                contents: [{ role: 'user', parts: [
-                    { text: NUTRITION_PROMPT + '\n\nAnalyze the food in this image and return the JSON:' },
-                    imagePart,
-                ]}],
-            });
+    for (let modelIdx = 0; modelIdx < MODEL_CASCADE.length; modelIdx++) {
+        const modelName = MODEL_CASCADE[modelIdx];
 
-            const text = getResponseText(result.response);
-            console.log('Gemini image response length:', text.length);
+        for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+            try {
+                return await callFn(modelName);
+            } catch (error) {
+                const tag = `[${label}] ${modelName} attempt ${attempt + 1}/${MAX_RETRIES + 1}`;
+                console.error(`${tag}: ${error.message}`);
+                errors.push(`${modelName}: ${error.message}`);
 
-            return extractJSON(text);
-        } catch (error) {
-            console.error(`Gemini image analysis error (attempt ${attempt + 1}/${retries + 1}):`, error.message);
-            if (attempt < retries && (error.message.includes('fetch failed') || error.message.includes('ECONNRESET') || error.message.includes('timeout'))) {
-                console.log(`Retrying in ${(attempt + 1) * 2} seconds...`);
-                await new Promise(r => setTimeout(r, (attempt + 1) * 2000));
-                continue;
+                // If the model is overloaded, skip remaining retries and move to next model
+                if (isModelOverloaded(error)) {
+                    console.log(`⚠️  ${modelName} overloaded — switching to next model`);
+                    break;
+                }
+
+                // For other transient errors, retry with exponential backoff
+                if (isTransientError(error) && attempt < MAX_RETRIES) {
+                    const delay = BASE_DELAY_MS * Math.pow(2, attempt);
+                    console.log(`⏳ Retrying in ${delay}ms...`);
+                    await sleep(delay);
+                    continue;
+                }
+
+                // Non-transient error — don't retry, don't cascade
+                if (!isTransientError(error)) {
+                    throw new Error(`Analysis failed: ${error.message}`);
+                }
             }
-            throw new Error('Failed to analyze image: ' + error.message);
         }
     }
+
+    // All models exhausted
+    throw new Error(
+        'All AI models are currently busy. Please try again in a few seconds. ' +
+        `(Tried: ${MODEL_CASCADE.join(', ')})`
+    );
+}
+
+/**
+ * Analyze a food image and return structured nutrition data.
+ */
+const analyzeImage = async (imageBuffer, mimeType) => {
+    return executeWithCascade(async (modelName) => {
+        const model = genAI.getGenerativeModel({
+            model: modelName,
+            generationConfig: { responseMimeType: 'application/json' },
+        });
+
+        const result = await model.generateContent({
+            contents: [{
+                role: 'user',
+                parts: [
+                    { text: NUTRITION_PROMPT + '\n\nAnalyze the food in this image and return the JSON:' },
+                    { inlineData: { data: imageBuffer.toString('base64'), mimeType } },
+                ],
+            }],
+        });
+
+        const text = getResponseText(result.response);
+        console.log(`✅ Image analysis OK (${modelName}), response length: ${text.length}`);
+        return extractJSON(text);
+    }, 'image');
 };
 
+/**
+ * Analyze a text food description and return structured nutrition data.
+ */
 const analyzeText = async (foodDescription) => {
-    try {
+    return executeWithCascade(async (modelName) => {
         const model = genAI.getGenerativeModel({
-            model: MODEL_NAME,
-            generationConfig: {
-                responseMimeType: 'application/json',
-            },
+            model: modelName,
+            generationConfig: { responseMimeType: 'application/json' },
         });
 
         const result = await model.generateContent([
@@ -163,13 +248,24 @@ const analyzeText = async (foodDescription) => {
         ]);
 
         const text = getResponseText(result.response);
-        console.log('Gemini text response length:', text.length);
-
+        console.log(`✅ Text analysis OK (${modelName}), response length: ${text.length}`);
         return extractJSON(text);
-    } catch (error) {
-        console.error('Gemini text analysis error:', error.message);
-        throw new Error('Failed to analyze food: ' + error.message);
-    }
+    }, 'text');
 };
 
-module.exports = { analyzeImage, analyzeText };
+/**
+ * Send a chat message with model cascade support.
+ */
+const chatWithCoach = async (systemPrompt, chatHistory, message) => {
+    return executeWithCascade(async (modelName) => {
+        const model = genAI.getGenerativeModel({ model: modelName });
+
+        const chat = model.startChat({ history: chatHistory });
+        const result = await chat.sendMessage(message);
+        const text = result.response.text();
+        console.log(`✅ Chat OK (${modelName}), response length: ${text.length}`);
+        return text;
+    }, 'chat');
+};
+
+module.exports = { analyzeImage, analyzeText, chatWithCoach };

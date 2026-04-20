@@ -1,12 +1,10 @@
 const express = require('express');
-const { GoogleGenerativeAI } = require('@google/generative-ai');
 const { authMiddleware } = require('../middleware/auth');
 const { getPool, isDBAvailable } = require('../config/db');
+const { chatWithCoach } = require('../services/gemini');
 require('dotenv').config();
 
 const router = express.Router();
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-const MODEL_NAME = 'gemini-2.5-flash';
 
 const COACH_SYSTEM_PROMPT = `You are Raju Danger 🙂123 — a friendly, knowledgeable, and energetic AI health and nutrition assistant. You help users with:
 
@@ -36,7 +34,7 @@ router.post('/', authMiddleware, async (req, res) => {
             return res.status(400).json({ error: 'Message is required' });
         }
 
-        // Get user profile for context
+        // Get user profile for personalized context
         let userContext = '';
         if (isDBAvailable()) {
             try {
@@ -54,24 +52,28 @@ router.post('/', authMiddleware, async (req, res) => {
             }
         }
 
-        const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+        // Build chat history for Gemini
+        const chatHistory = [
+            {
+                role: 'user',
+                parts: [{ text: COACH_SYSTEM_PROMPT + userContext + '\n\nPlease acknowledge you understand your role.' }],
+            },
+            {
+                role: 'model',
+                parts: [{ text: 'I understand! I\'m Raju Danger 🙂123, your personal health and nutrition assistant. I\'m here to help you stay energetic, eat well, and achieve your fitness goals! 💪 How can I help you today?' }],
+            },
+            ...history.map(msg => ({
+                role: msg.role === 'user' ? 'user' : 'model',
+                parts: [{ text: msg.content }],
+            })),
+        ];
 
-        // Build chat history
-        const chatHistory = history.map(msg => ({
-            role: msg.role === 'user' ? 'user' : 'model',
-            parts: [{ text: msg.content }],
-        }));
-
-        const chat = model.startChat({
-            history: [
-                { role: 'user', parts: [{ text: COACH_SYSTEM_PROMPT + userContext + '\n\nPlease acknowledge you understand your role.' }] },
-                { role: 'model', parts: [{ text: 'I understand! I\'m Raju Danger 🙂123, your personal health and nutrition assistant. I\'m here to help you stay energetic, eat well, and achieve your fitness goals! 💪 How can I help you today?' }] },
-                ...chatHistory,
-            ],
-        });
-
-        const result = await chat.sendMessage(message);
-        const responseText = result.response.text();
+        // Use the centralized cascade function from gemini.js
+        const responseText = await chatWithCoach(
+            COACH_SYSTEM_PROMPT + userContext,
+            chatHistory,
+            message
+        );
 
         res.json({
             success: true,
@@ -79,7 +81,15 @@ router.post('/', authMiddleware, async (req, res) => {
         });
     } catch (error) {
         console.error('Chat error:', error.message);
-        res.status(500).json({ error: 'Failed to get response. Please try again.' });
+
+        // Return user-friendly error
+        const isOverloaded = error.message.includes('busy') || error.message.includes('503') || error.message.includes('overloaded');
+        const statusCode = isOverloaded ? 503 : 500;
+        const userMessage = isOverloaded
+            ? 'AI is temporarily busy. Please try again in a few seconds.'
+            : 'Failed to get response. Please try again.';
+
+        res.status(statusCode).json({ error: userMessage });
     }
 });
 
