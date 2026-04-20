@@ -10,7 +10,6 @@
   <img src="https://img.shields.io/badge/Node.js-Express%205-339933?style=flat-square&logo=node.js&logoColor=white"/>
   <img src="https://img.shields.io/badge/AI-Google%20Gemini%202.5-4285F4?style=flat-square&logo=google&logoColor=white"/>
   <img src="https://img.shields.io/badge/Database-PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Deploy-Render-46E3B7?style=flat-square&logo=render&logoColor=white"/>
   <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square"/>
 </p>
 
@@ -20,45 +19,73 @@
 
 ---
 
-## 📸 Application Showcase
+## 🎬 Live App Demo
 
-### 🏠 Home — Light Mode
-> The clean, modern main interface with tri-modal food input: Image upload, Text description, and Voice recognition.
+> Full walkthrough of the NutriVision application — navigating pages, switching themes, and exploring all features.
 
-![NutriVision Home — Light Mode](docs/screenshots/home_light.png)
-
-### 🌙 Home — Dark Mode
-> Premium glassmorphism dark theme with smooth transitions and glowing accent colors.
-
-![NutriVision Home — Dark Mode](docs/screenshots/home_dark.png)
-
-### 📊 Dashboard
-> Track your nutrition over time with period-based filtering (Today, Week, Month, All).
-
-![Dashboard](docs/screenshots/dashboard.png)
-
-### 🤖 Raju Danger 🙂123 — AI Health Coach
-> Your personalized AI nutrition assistant who knows your health profile and gives tailored advice.
-
-![AI Chatbot](docs/screenshots/chatbot.png)
-
-### 👤 Profile & Body Metrics
-> Complete health profile with BMI, body composition, calorie needs (BMR/TDEE), and macro targets.
-
-![Profile](docs/screenshots/profile.png)
-
-### 📷 Image Upload
-> Drag & drop or camera capture — analyze any food instantly from a photo.
-
-![Image Upload](docs/screenshots/image_upload.png)
+<p align="center">
+  <img src="docs/screenshots/app_demo.webp" alt="NutriVision App Demo" width="800"/>
+</p>
 
 ---
 
-## 🎬 Live Demo Recording
+## 📸 Application Screenshots
 
-> Full walkthrough of the NutriVision application — switching themes, navigating pages, and exploring features.
+### 🏠 Home — Text Analysis (Light Mode)
+> Clean, modern tri-modal food input with quick suggestion chips and real-time analysis.
 
-https://github.com/user-attachments/assets/placeholder-video
+<p align="center">
+  <img src="docs/screenshots/home_light.png" alt="Home Light Mode" width="800"/>
+</p>
+
+### 🌙 Home — Dark Mode
+> Premium glassmorphism dark theme with smooth transitions, glowing accent colors, and custom cursor.
+
+<p align="center">
+  <img src="docs/screenshots/home_dark.png" alt="Home Dark Mode" width="800"/>
+</p>
+
+### 📷 Image Upload & Camera
+> Drag-and-drop or use your device camera — AI identifies food and returns complete nutrition data.
+
+<p align="center">
+  <img src="docs/screenshots/image_upload.png" alt="Image Upload" width="800"/>
+</p>
+
+### 🍟 AI Nutrition Analysis Card
+> Complete nutrition breakdown with calories, macros, vitamins, minerals, health score, allergens, and diet tags.
+
+<p align="center">
+  <img src="docs/screenshots/nutrition_card.png" alt="Nutrition Analysis Card" width="800"/>
+</p>
+
+### 📊 Dashboard — Real Nutrition Data
+> Track your daily intake with calorie budget, macro cards, and hourly trend charts. Shows real analyzed data: **434 kcal consumed, 52.1g protein, 5.5g carbs, 21.3g fat**.
+
+<p align="center">
+  <img src="docs/screenshots/dashboard_data.png" alt="Dashboard with Real Data" width="800"/>
+</p>
+
+### 🤖 Raju Danger 🙂123 — AI Health Coach
+> Your personalized AI nutrition assistant who reads your health profile and gives tailored advice on meals, exercises, calories, and hydration.
+
+<p align="center">
+  <img src="docs/screenshots/chatbot.png" alt="AI Chatbot Raju" width="800"/>
+</p>
+
+### 👤 Profile — Body Composition & Calorie Needs
+> Complete health profile with **BMI (23.9 Normal)**, body fat (17.3%), lean mass, ideal weight, **BMR (1653 cal)**, **TDEE (1984 cal)**, and personalized daily macro targets.
+
+<p align="center">
+  <img src="docs/screenshots/profile_data.png" alt="Profile Body Metrics" width="800"/>
+</p>
+
+### 🎬 Entry Animation — Scroll Canvas
+> GSAP-powered landing page with frame-by-frame scroll animation and loading progress bar.
+
+<p align="center">
+  <img src="docs/screenshots/landing_animation.png" alt="Landing Animation" width="800"/>
+</p>
 
 ---
 
@@ -95,8 +122,9 @@ Every analysis returns a comprehensive nutrition card with **calories, macronutr
 
 ### 📊 Dashboard & Analytics
 - **Period-Based Filtering** — Today / Week / Month / All time views
-- **Calorie Tracking** — Cumulative calorie intake visualization
-- **Macro Distribution** — Protein, carbs, fat breakdown
+- **Calorie Budget Tracker** — Visual donut chart with consumed vs target
+- **Macro Distribution** — Protein, carbs, fat breakdown cards
+- **Calorie Trend Chart** — Hourly/daily calorie intake visualization
 - **Meal History** — Full log of all analyzed foods with timestamps
 - **Auto-Save** — Authenticated analyses are automatically saved to history
 
@@ -124,22 +152,22 @@ Every analysis returns a comprehensive nutrition card with **calories, macronutr
 
 ---
 
-## 🏗️ Architecture & Tech Stack
+## 🏗️ Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                        CLIENT (React 19 + Vite)                  │
-│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────────────┐ │
-│  │  Pages   │  │Components│  │ Context  │  │    Services      │ │
-│  │----------│  │----------│  │----------│  │------------------│ │
-│  │ Landing  │  │ImageUpload│  │AuthContext│  │ api.js (axios)  │ │
-│  │ Login    │  │TextInput │  │          │  │                  │ │
-│  │ Signup   │  │SpeechInput│  │          │  │                  │ │
-│  │ Dashboard│  │NutritionCard│ │         │  │                  │ │
-│  │ Chatbot  │  │ThemeToggle│  │          │  │                  │ │
-│  │ Profile  │  │CustomCursor│ │          │  │                  │ │
-│  │Onboarding│  │ History  │  │          │  │                  │ │
-│  └──────────┘  └──────────┘  └──────────┘  └──────────────────┘ │
+│                        CLIENT (React 19 + Vite 7)                │
+│  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌────────────────┐  │
+│  │  Pages   │  │Components│  │ Context  │  │   Services     │  │
+│  │----------│  │----------│  │----------│  │----------------│  │
+│  │ Landing  │  │ImageUpload│  │AuthContext│  │ api.js (axios) │  │
+│  │ Login    │  │TextInput │  │          │  │                │  │
+│  │ Signup   │  │SpeechInput│  │          │  │                │  │
+│  │ Dashboard│  │NutritionCard│ │         │  │                │  │
+│  │ Chatbot  │  │ThemeToggle│  │          │  │                │  │
+│  │ Profile  │  │CustomCursor│ │          │  │                │  │
+│  │Onboarding│  │ History  │  │          │  │                │  │
+│  └──────────┘  └──────────┘  └──────────┘  └────────────────┘  │
 └──────────────────────────────┬──────────────────────────────────┘
                                │ HTTP/REST (Axios)
                                ▼
@@ -153,26 +181,17 @@ Every analysis returns a comprehensive nutrition card with **calories, macronutr
 │  │ userRoutes   │  │              │  │                      │   │
 │  │ chatRoutes   │  │              │  │                      │   │
 │  └──────────────┘  └──────────────┘  └──────────────────────┘   │
-│                                                                  │
-│  ┌──────────────────────────────────────────────────────────┐    │
-│  │              Config: db.js (PostgreSQL + auto-migration)  │    │
-│  └──────────────────────────────────────────────────────────┘    │
 └──────────────────────────────┬───────────────────────────────────┘
                                │
               ┌────────────────┼────────────────┐
               ▼                ▼                ▼
      ┌──────────────┐  ┌─────────────┐  ┌────────────┐
      │  PostgreSQL  │  │Google Gemini│  │  Gmail SMTP│
-     │  (Database)  │  │  2.5 Flash  │  │  (Nodemailer)│
-     │--------------│  │-------------│  │--------------│
-     │ users        │  │Image Analysis│  │ OTP Emails  │
-     │ otps         │  │Text Analysis│  │ Verification │
-     │ nutrition_   │  │Chat/Coach   │  │ Password Reset│
-     │   analyses   │  │             │  │              │
+     │  (Database)  │  │  2.5 Flash  │  │ (Nodemailer)│
      └──────────────┘  └─────────────┘  └────────────┘
 ```
 
-### Technology Breakdown
+### Tech Stack
 
 | Layer | Technology | Purpose |
 |:---|:---|:---|
@@ -186,7 +205,6 @@ Every analysis returns a comprehensive nutrition card with **calories, macronutr
 | **Auth** | JWT + bcryptjs | Stateless token authentication |
 | **Email** | Nodemailer + Gmail SMTP | OTP delivery for signup/reset |
 | **File Upload** | Multer (memory storage) | In-memory image processing |
-| **Deployment** | Render (Web Service + PostgreSQL) | Cloud hosting with CI/CD |
 
 ---
 
@@ -197,7 +215,7 @@ nutrivision/
 ├── 📂 client/                    # React Frontend (Vite)
 │   ├── 📂 public/
 │   │   ├── logo.jpg              # App logo
-│   │   └── sequence/             # Landing page animation frames
+│   │   └── sequence/             # Landing page animation frames (140 frames)
 │   ├── 📂 src/
 │   │   ├── 📂 components/
 │   │   │   ├── CustomCursor.jsx  # Interactive cursor effect
@@ -220,36 +238,37 @@ nutrivision/
 │   │   │   ├── Profile.jsx       # User profile & body metrics
 │   │   │   └── Signup.jsx        # OTP-verified registration
 │   │   ├── 📂 services/
-│   │   │   └── api.js            # Axios API client
+│   │   │   └── api.js            # Axios API client (auto-detects prod/dev)
 │   │   ├── App.jsx               # Root component + routing
 │   │   ├── index.css             # Global styles + Tailwind
 │   │   └── main.jsx              # React DOM entry point
-│   ├── index.html                # HTML template
-│   ├── vite.config.js            # Vite configuration
-│   ├── tailwind.config.js        # Tailwind CSS configuration
-│   └── package.json              # Frontend dependencies
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── tailwind.config.js
+│   └── package.json
 │
 ├── 📂 server/                    # Express Backend
 │   ├── 📂 config/
-│   │   └── db.js                 # PostgreSQL pool + auto-migration
+│   │   └── db.js                 # PostgreSQL pool + auto-migration + DATABASE_URL support
 │   ├── 📂 middleware/
 │   │   └── auth.js               # JWT auth + optional auth middleware
 │   ├── 📂 routes/
-│   │   ├── analyzeRoutes.js      # Food analysis + history + stats
-│   │   ├── authRoutes.js         # Signup, login, OTP, password reset
-│   │   ├── chatRoutes.js         # AI health coach endpoint
-│   │   └── userRoutes.js         # Profile CRUD + onboarding
+│   │   ├── analyzeRoutes.js      # POST /image, /text, /speech + GET /history, /stats
+│   │   ├── authRoutes.js         # POST /signup, /verify-otp, /login, /forgot-password, /reset-password
+│   │   ├── chatRoutes.js         # POST / (AI health coach)
+│   │   └── userRoutes.js         # POST /onboarding + GET,PUT /profile
 │   ├── 📂 services/
-│   │   ├── email.js              # Nodemailer OTP email service
-│   │   └── gemini.js             # Google Gemini AI integration
-│   ├── server.js                 # Express app entry + static serving
-│   └── package.json              # Backend dependencies
+│   │   ├── email.js              # Nodemailer OTP email (HTML template)
+│   │   └── gemini.js             # Gemini AI — image/text analysis with retry + JSON extraction
+│   ├── server.js                 # Express entry + CORS + static serving (production)
+│   └── package.json
 │
-├── 📂 docs/screenshots/          # App screenshots for documentation
+├── 📂 docs/screenshots/          # App screenshots for README
 ├── .env.example                  # Environment variable template
-├── .gitignore                    # Git ignore rules
+├── .gitignore
 ├── render.yaml                   # Render deployment blueprint
-└── README.md                     # This file
+├── LICENSE                       # MIT License
+└── README.md
 ```
 
 ---
@@ -282,14 +301,11 @@ cp .env.example server/.env
 Edit `server/.env` with your actual values:
 
 ```env
-# Required
 GEMINI_API_KEY=your_gemini_api_key
 DB_USER=postgres
 DB_PASSWORD=your_postgres_password
 DB_NAME=nutrivision
 JWT_SECRET=your_strong_random_secret
-
-# Email (for OTP verification)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your_email@gmail.com
@@ -297,138 +313,84 @@ SMTP_PASSWORD=your_gmail_app_password
 EMAIL_FROM=your_email@gmail.com
 ```
 
-### 3️⃣ Install Dependencies
+### 3️⃣ Install & Run
 
 ```bash
-# Install server dependencies
+# Install dependencies
 npm --prefix server install
-
-# Install client dependencies
 npm --prefix client install
-```
 
-### 4️⃣ Start Development Servers
-
-```bash
-# Terminal 1 — Backend API
+# Terminal 1 — Backend API (port 3001)
 npm --prefix server start
 
-# Terminal 2 — Frontend dev server
+# Terminal 2 — Frontend dev server (port 5173)
 npm --prefix client run dev
 ```
 
-### 5️⃣ Verify Setup
+### 4️⃣ Verify Setup
 
 | Check | URL | Expected |
 |:---|:---|:---|
 | API Health | http://localhost:3001/api/health | `{ "status": "ok", "database": "connected" }` |
 | Frontend | http://localhost:5173 | React app loads |
-| Signup Flow | Create account | OTP email received |
-| Image Analysis | Upload food photo | Nutrition card appears |
-
----
-
-## ☁️ Deploy to Render
-
-NutriVision is configured for one-click deployment on [Render](https://render.com).
-
-### Option A: Blueprint Deployment (Recommended)
-
-1. Push your code to GitHub
-2. Go to [Render Dashboard](https://dashboard.render.com) → **New** → **Blueprint**
-3. Connect your GitHub repo
-4. Render auto-detects `render.yaml` and creates:
-   - ✅ Web Service (Node.js)
-   - ✅ PostgreSQL Database
-5. Set the `sync: false` environment variables manually:
-   - `GEMINI_API_KEY`
-   - `SMTP_USER`
-   - `SMTP_PASSWORD`
-   - `EMAIL_FROM`
-6. Deploy! 🚀
-
-### Option B: Manual Deployment
-
-1. **Create PostgreSQL** database on Render → copy the **Internal Database URL**
-2. **Create Web Service** → Connect GitHub repo
-3. Configure:
-
-   | Setting | Value |
-   |:---|:---|
-   | **Root Directory** | `server` |
-   | **Build Command** | `npm run render-build` |
-   | **Start Command** | `npm start` |
-   | **Environment** | `Node` |
-
-4. Add environment variables:
-
-   | Variable | Value |
-   |:---|:---|
-   | `NODE_ENV` | `production` |
-   | `DATABASE_URL` | *(from Render PostgreSQL)* |
-   | `GEMINI_API_KEY` | *(your key)* |
-   | `JWT_SECRET` | *(generate a random string)* |
-   | `SMTP_HOST` | `smtp.gmail.com` |
-   | `SMTP_PORT` | `587` |
-   | `SMTP_USER` | *(your email)* |
-   | `SMTP_PASSWORD` | *(your app password)* |
-   | `EMAIL_FROM` | *(your email)* |
-   | `CORS_ORIGIN` | `*` |
-
-5. Deploy!
+| Signup | Create account | OTP email received |
+| Analysis | Upload food photo or type food name | Nutrition card appears |
 
 ---
 
 ## 🔌 API Reference
 
+### Health Check
+
+```
+GET /api/health                    # Server + database status (no auth)
+```
+
 ### Authentication
 
-| Method | Endpoint | Auth | Description |
-|:---|:---|:---|:---|
-| `POST` | `/api/auth/signup` | ❌ | Send OTP to email for registration |
-| `POST` | `/api/auth/verify-otp` | ❌ | Verify OTP + create account |
-| `POST` | `/api/auth/login` | ❌ | Email + password login |
-| `POST` | `/api/auth/forgot-password` | ❌ | Send password reset OTP |
-| `POST` | `/api/auth/reset-password` | ❌ | Reset password with OTP |
+```
+POST /api/auth/signup              # Send OTP to email for registration
+POST /api/auth/verify-otp          # Verify OTP + create account with profile
+POST /api/auth/login               # Email + password login → JWT token
+POST /api/auth/forgot-password     # Send password reset OTP
+POST /api/auth/reset-password      # Verify OTP + set new password
+```
 
 ### Food Analysis
 
-| Method | Endpoint | Auth | Description |
-|:---|:---|:---|:---|
-| `POST` | `/api/analyze/image` | ❌ | Analyze food from image (multipart) |
-| `POST` | `/api/analyze/text` | ❌ | Analyze food from text description |
-| `POST` | `/api/analyze/speech` | ❌ | Analyze food from speech text |
-| `POST` | `/api/analyze/save` | ✅ | Save analysis to history |
-| `GET` | `/api/analyze/history` | ✅ | Get user's analysis history |
-| `GET` | `/api/analyze/stats` | ✅ | Get aggregated nutrition stats |
-| `DELETE` | `/api/analyze/history/:id` | ✅ | Delete a history entry |
+```
+POST /api/analyze/image            # Analyze food from image (multipart/form-data)
+POST /api/analyze/text             # Analyze food from text description
+POST /api/analyze/speech           # Analyze food from speech-to-text
+POST /api/analyze/save        🔒   # Save analysis to user history
+GET  /api/analyze/history     🔒   # Get user's analysis history (?period=day|week|month)
+GET  /api/analyze/stats       🔒   # Get aggregated nutrition stats
+DELETE /api/analyze/history/:id 🔒  # Delete a history entry
+```
 
 ### User Profile
 
-| Method | Endpoint | Auth | Description |
-|:---|:---|:---|:---|
-| `POST` | `/api/user/onboarding` | ✅ | Save onboarding profile data |
-| `GET` | `/api/user/profile` | ✅ | Get user profile |
-| `PUT` | `/api/user/profile` | ✅ | Update user profile |
+```
+POST /api/user/onboarding     🔒   # Save onboarding profile data
+GET  /api/user/profile        🔒   # Get user profile
+PUT  /api/user/profile        🔒   # Update user profile
+```
 
-### AI Chat
+### AI Health Coach
 
-| Method | Endpoint | Auth | Description |
-|:---|:---|:---|:---|
-| `POST` | `/api/chat` | ✅ | Send message to AI health coach |
+```
+POST /api/chat                🔒   # Send message to Raju Danger 🙂123
+```
 
-### Health Check
-
-| Method | Endpoint | Auth | Description |
-|:---|:---|:---|:---|
-| `GET` | `/api/health` | ❌ | Server + DB status |
+> 🔒 = Requires `Authorization: Bearer <JWT_TOKEN>` header
 
 ---
 
 ## 🧪 Database Schema
 
 ```sql
--- Users table (auto-created on server startup)
+-- Auto-created on server startup — no manual migration needed
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) UNIQUE NOT NULL,
@@ -448,22 +410,20 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- OTP verification table
 CREATE TABLE otps (
     id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     otp_code VARCHAR(10) NOT NULL,
-    purpose VARCHAR(20) NOT NULL,  -- 'signup' or 'reset'
+    purpose VARCHAR(20) NOT NULL,   -- 'signup' or 'reset'
     expires_at TIMESTAMP NOT NULL,
     used BOOLEAN DEFAULT false,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Nutrition analysis history
 CREATE TABLE nutrition_analyses (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-    input_type VARCHAR(20) NOT NULL,  -- 'image', 'text', 'speech'
+    input_type VARCHAR(20) NOT NULL, -- 'image', 'text', 'speech'
     input_text TEXT,
     food_name VARCHAR(500),
     nutrition_data JSONB,
@@ -473,65 +433,56 @@ CREATE TABLE nutrition_analyses (
 );
 ```
 
-> **Note:** Tables are auto-created by the server on startup — no manual migration needed.
-
 ---
 
 ## 🏋️ Challenges & Solutions During Development
 
 | # | Challenge | Solution |
 |:---|:---|:---|
-| 1 | **Gemini response parsing** — AI returns thinking parts mixed with JSON | Built a robust `getResponseText()` extractor that filters `thought` parts and a multi-strategy `extractJSON()` with code-block extraction, brace matching, and plain parse fallback |
-| 2 | **OTP email delivery** — Gmail blocks less-secure apps | Used Gmail App Passwords with Nodemailer SMTP transport, avoiding OAuth complexity while maintaining security |
-| 3 | **Image analysis reliability** — Network timeouts on large images | Implemented retry logic with exponential backoff (up to 3 attempts) and `responseMimeType: 'application/json'` for structured output |
-| 4 | **Serving SPA + API on same port** — Render single-service constraint | Server serves static client build in production, with SPA fallback for client-side routing (`*` → `index.html`) |
-| 5 | **Database portability** — Local PostgreSQL vs. Render PostgreSQL | Dual connection strategy: `DATABASE_URL` for cloud, individual `DB_*` vars for local — with SSL auto-detection |
-| 6 | **CORS in production** — Cross-origin blocked on Render | Dynamic CORS origin resolution with `CORS_ORIGIN` env var, allowing `*` or comma-separated domains |
-| 7 | **Theme persistence** — Dark/light mode resets on navigation | CSS custom properties with `localStorage`-backed theme toggle on the `:root` element |
-| 8 | **BMI & calorie calculations** — Inaccurate fitness metrics | Implemented Mifflin-St Jeor equation for BMR, activity multiplier for TDEE, and clinical BMI categories |
+| 1 | **Gemini response parsing** — AI returns thinking parts mixed with JSON | Built `getResponseText()` that filters `thought` parts and `extractJSON()` with code-block extraction, brace matching, and plain parse fallback |
+| 2 | **OTP email delivery** — Gmail blocks less-secure apps | Used Gmail App Passwords with Nodemailer SMTP, avoiding OAuth complexity |
+| 3 | **Image analysis reliability** — Network timeouts on large images | Retry logic with exponential backoff (3 attempts) + `responseMimeType: 'application/json'` for structured output |
+| 4 | **Database portability** — Local PostgreSQL vs cloud PostgreSQL | Dual connection: `DATABASE_URL` for cloud, individual `DB_*` vars for local — with SSL auto-detection |
+| 5 | **Theme persistence** — Dark/light mode resets on navigation | CSS custom properties with `localStorage`-backed toggle on `:root` element |
+| 6 | **BMI & calorie calculations** — Inaccurate fitness metrics | Mifflin-St Jeor equation for BMR, activity multiplier for TDEE, clinical BMI categories |
+| 7 | **Scroll animation performance** — 140 frames loading slowly | GSAP ScrollTrigger with canvas rendering + progress-based preloading |
+| 8 | **Multi-step signup** — Complex OTP + profile onboarding | Chained flow: email → OTP → password + profile → JWT — all in one verify-otp endpoint |
 
 ---
 
-## 🔒 Security Considerations
+## 🔒 Security
 
 - ✅ Passwords hashed with **bcryptjs** (12 salt rounds)
-- ✅ **JWT tokens** with 30-day expiry for stateless auth
+- ✅ **JWT tokens** with 30-day expiry
 - ✅ **OTP expiry** (10 minutes) prevents brute-force
-- ✅ **Input validation** on all API endpoints
-- ✅ **File type filtering** — only JPEG, PNG, WebP, GIF accepted
+- ✅ **Input validation** on all endpoints
+- ✅ **File type filtering** — only JPEG, PNG, WebP, GIF
 - ✅ **10MB upload limit** prevents payload abuse
-- ✅ **Environment variables** for all secrets (never hardcoded)
-- ✅ **CORS** configured to restrict origins
-- ⚠️ **For production**: Rotate `JWT_SECRET`, use strong `GEMINI_API_KEY`, enable rate limiting
+- ✅ **Environment variables** for all secrets
+- ✅ **CORS** origin restriction
 
 ---
 
 ## 🗺️ Roadmap
 
-- [ ] 📱 React Native mobile app (iOS + Android)
+- [ ] 📱 React Native mobile app
 - [ ] 🍽️ Meal planning & recipe suggestions
-- [ ] 📈 Advanced analytics with weekly/monthly reports
-- [ ] 🔔 Push notifications for meal reminders
+- [ ] 📈 Weekly/monthly nutrition reports (PDF export)
+- [ ] 🔔 Meal reminder notifications
 - [ ] 🌐 Multi-language support (Hindi, Telugu, Spanish)
-- [ ] 🤝 Social features — share meals, compare with friends
-- [ ] 🏋️ Workout tracking integration
 - [ ] 📸 Barcode/label scanner for packaged foods
 - [ ] 🔄 Progressive Web App (PWA) support
-- [ ] 📊 Export nutrition data as PDF/CSV
+- [ ] 🏋️ Workout tracking integration
 
 ---
 
 ## 🤝 Contributing
-
-Contributions are welcome! Please follow these steps:
 
 1. **Fork** the repository
 2. **Create** a feature branch: `git checkout -b feature/amazing-feature`
 3. **Commit** your changes: `git commit -m 'feat: add amazing feature'`
 4. **Push** to the branch: `git push origin feature/amazing-feature`
 5. **Open** a Pull Request
-
-Please follow [Conventional Commits](https://www.conventionalcommits.org/) for commit messages.
 
 ---
 
@@ -543,15 +494,11 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ## 👨‍💻 Author
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Developer-Shiva%20Karnati-00C853?style=for-the-badge&logo=dev.to&logoColor=white"/>
-</p>
-
 <table align="center">
   <tr>
     <td align="center">
-      <strong>Shiva Karnati</strong><br/>
-      Full-Stack Developer & AI Enthusiast
+      <h3>Shiva Karnati</h3>
+      <p>Full-Stack Developer & AI Enthusiast</p>
     </td>
   </tr>
   <tr>
@@ -568,14 +515,13 @@ This project is licensed under the **MIT License** — see the [LICENSE](LICENSE
 
 ## 🙏 Acknowledgements
 
-- [Google Gemini AI](https://ai.google.dev/) — Generative AI for nutrition analysis
+- [Google Gemini AI](https://ai.google.dev/) — Generative AI engine
 - [React](https://react.dev/) — Frontend framework
 - [Express.js](https://expressjs.com/) — Backend framework
 - [Tailwind CSS](https://tailwindcss.com/) — Utility-first CSS
 - [Framer Motion](https://www.framer.com/motion/) — Animation library
 - [GSAP](https://gsap.com/) — Scroll-driven animations
 - [Recharts](https://recharts.org/) — Data visualization
-- [Render](https://render.com/) — Cloud deployment platform
 - [Nodemailer](https://nodemailer.com/) — Email service
 
 ---
