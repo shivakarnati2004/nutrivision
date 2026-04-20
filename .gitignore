@@ -1,0 +1,81 @@
+# ========================================
+# NutriVision — .gitignore
+# ========================================
+
+# === Dependencies ===
+node_modules/
+**/node_modules/
+
+# === Environment Variables (NEVER commit) ===
+.env
+.env.local
+.env.development
+.env.production
+.env.*.local
+server/.env
+
+# === Build Outputs ===
+dist/
+build/
+client/dist/
+client/build/
+
+# === Logs ===
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# === OS Files ===
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# === IDE / Editors ===
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.code-workspace
+
+# === Testing ===
+coverage/
+*.lcov
+.nyc_output/
+
+# === Temporary Files ===
+*.tmp
+*.temp
+*.bak
+*.orig
+.cache/
+.parcel-cache/
+
+# === Misc ===
+*.local
+*.tsbuildinfo
+
+# === Test/Helper Scripts (optional — keep if useful) ===
+# check_users.js
+# test_api.js
+# test_login.js
+# template_text.txt
+# template_text_utf8.txt
+
+# Project documents
+*.docx
+template_text*.txt
