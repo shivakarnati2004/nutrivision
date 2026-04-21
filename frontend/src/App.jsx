@@ -166,7 +166,6 @@ function HomePage() {
                                 </svg>
                                 <div className="flex-1">
                                     <p className="text-red-400 font-medium text-sm">Analysis Failed</p>
-                                    <p className="text-red-400/70 text-xs mt-1">{error}</p>
                                     {canRetry && (
                                         <button
                                             onClick={handleRetry}
