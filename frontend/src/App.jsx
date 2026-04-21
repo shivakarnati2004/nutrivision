@@ -115,6 +115,29 @@ function HomePage() {
 
     return (
         <div className="space-y-6 pb-24">
+            {!isAuthenticated && (
+                <motion.div 
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="glass-card p-4 border-primary-500/30 bg-primary-500/5 mb-6 flex items-center justify-between gap-4"
+                >
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-primary-500/20 flex items-center justify-center text-primary-400">
+                            ✨
+                        </div>
+                        <div>
+                            <h4 className="text-sm font-bold text-white">Trial Mode Active</h4>
+                            <p className="text-xs text-dark-400">You can try Text Analysis. Sign up to unlock Image & Speech!</p>
+                        </div>
+                    </div>
+                    <Link to="/signup">
+                        <button className="px-4 py-2 bg-primary-500 text-white rounded-lg text-xs font-bold hover:bg-primary-400 transition-all">
+                            Sign Up
+                        </button>
+                    </Link>
+                </motion.div>
+            )}
+
             <Home3DAnimation />
 
             {/* Tab Navigation */}
