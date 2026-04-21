@@ -4,102 +4,60 @@ import { Float, Center, Text3D, Html } from '@react-three/drei';
 import * as THREE from 'three';
 
 // Orbiting Icon Component
-function OrbitingIcon({ text, radius, speed, offset, color }) {
+function OrbitingIcon({ text, radius, speed, offset }) {
     const ref = useRef();
     
     useFrame((state) => {
         const t = state.clock.getElapsedTime() * speed + offset;
         ref.current.position.x = Math.cos(t) * radius;
         ref.current.position.z = Math.sin(t) * radius;
-        // Make it face the center slightly, or just rotate
-        ref.current.rotation.y += 0.01;
-        ref.current.rotation.x += 0.005;
-        ref.current.rotation.z += 0.003;
+        ref.current.position.y = Math.sin(t * 0.5) * 0.5;
     });
 
     return (
         <group ref={ref}>
-            <Float speed={2} rotationIntensity={1} floatIntensity={2}>
-                <mesh castShadow>
-                    <boxGeometry args={[0.8, 0.8, 0.8]} />
-                    <meshPhysicalMaterial 
-                        color={color}
-                        transmission={0.8}
-                        opacity={1}
-                        roughness={0.1}
-                        metalness={0.1}
-                        ior={1.5}
-                        thickness={0.5}
-                        clearcoat={1}
-                        side={THREE.DoubleSide}
-                    />
-                </mesh>
-                <Html position={[0, 0, 0.5]} center transform>
-                    <div className="text-3xl filter drop-shadow-lg">{text}</div>
-                </Html>
-            </Float>
+            <Html center transform distanceFactor={10}>
+                <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl border border-white/20 text-3xl shadow-2xl transition-all duration-300 hover:scale-125">
+                    {text}
+                </div>
+            </Html>
         </group>
     );
 }
 
 function FoodPlate() {
     const plateRef = useRef();
+    const texture = useMemo(() => new THREE.TextureLoader().load('/food_plate.png'), []);
 
     useFrame((state, delta) => {
         plateRef.current.rotation.y += delta * 0.2;
-        plateRef.current.rotation.z = Math.sin(state.clock.getElapsedTime()) * 0.05;
-        plateRef.current.rotation.x = Math.cos(state.clock.getElapsedTime() * 0.8) * 0.05;
     });
 
     return (
-        <group ref={plateRef} position={[0, -0.5, 0]}>
-            {/* The Plate (Glassmorphism Base) */}
-            <mesh castShadow receiveShadow>
-                <cylinderGeometry args={[1.6, 1.2, 0.1, 64]} />
+        <group ref={plateRef}>
+            {/* Realistic Food Image on a Plane */}
+            <mesh position={[0, 0.05, 0]} rotation={[-Math.PI / 2, 0, 0]}>
+                <circleGeometry args={[1.5, 64]} />
+                <meshBasicMaterial map={texture} transparent opacity={1} />
+            </mesh>
+
+            {/* Premium Glass Plate Base */}
+            <mesh position={[0, -0.05, 0]}>
+                <cylinderGeometry args={[1.7, 1.5, 0.1, 64]} />
                 <meshPhysicalMaterial 
                     color="#ffffff"
-                    transmission={0.9}
-                    opacity={1}
-                    metalness={0.1}
+                    transmission={0.95}
                     roughness={0.05}
                     ior={1.5}
-                    thickness={0.5}
+                    thickness={0.2}
                     clearcoat={1}
                 />
             </mesh>
-            
-            {/* Inner Ring (Detail) */}
-            <mesh position={[0, 0.06, 0]}>
-                <ringGeometry args={[1.2, 1.4, 64]} />
-                <meshPhysicalMaterial color="#10b981" metalness={0.8} roughness={0.2} side={THREE.DoubleSide} />
-            </mesh>
 
-            {/* Glowing "energy" food core in the center */}
-            <mesh position={[0, 0.4, 0]}>
-                <octahedronGeometry args={[0.6, 2]} />
-                <meshPhysicalMaterial 
-                    color="#34d399" 
-                    emissive="#10b981"
-                    emissiveIntensity={0.8}
-                    transmission={0.5}
-                    roughness={0.2}
-                />
-            </mesh>
-
-            {/* Glass Cloche (Dome) covering the food */}
-            <mesh position={[0, 0.1, 0]}>
-                <sphereGeometry args={[1.5, 64, 32, 0, Math.PI * 2, 0, Math.PI / 2]} />
-                <meshPhysicalMaterial 
-                    color="#f8fafc"
-                    transmission={0.95}
-                    opacity={1}
-                    metalness={0.2}
-                    roughness={0}
-                    ior={1.2}
-                    thickness={0.1}
-                    clearcoat={1}
-                    side={THREE.DoubleSide}
-                />
+            {/* Glowing Ring Effect */}
+            <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.02, 0]}>
+                <ringGeometry args={[1.75, 1.85, 64]} />
+                <meshBasicMaterial color="#10b981" transparent opacity={0.3} />
             </mesh>
         </group>
     );
@@ -126,9 +84,9 @@ export default function Home3DAnimation() {
                 <FoodPlate />
 
                 {/* Orbiting Inputs */}
-                <OrbitingIcon text="📷" radius={2.5} speed={0.5} offset={0} color="#3b82f6" />
-                <OrbitingIcon text="📝" radius={2.5} speed={0.5} offset={(Math.PI * 2) / 3} color="#8b5cf6" />
-                <OrbitingIcon text="🎙️" radius={2.5} speed={0.5} offset={(Math.PI * 4) / 3} color="#f59e0b" />
+                <OrbitingIcon text="📷" radius={2.5} speed={0.5} offset={0} />
+                <OrbitingIcon text="📝" radius={2.5} speed={0.5} offset={(Math.PI * 2) / 3} />
+                <OrbitingIcon text="🎙️" radius={2.5} speed={0.5} offset={(Math.PI * 4) / 3} />
             </Canvas>
         </div>
     );

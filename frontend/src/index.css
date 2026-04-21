@@ -160,3 +160,21 @@ canvas {
   background: rgba(34, 197, 94, 0.3); /* primary-500 with opacity */
   color: white;
 }
+@keyframes fadeOutLabel {
+  0% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  70% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(0.5rem) scale(0.95);
+  }
+}
+
+.animate-fadeOut {
+  animation: fadeOutLabel 2s ease-out forwards;
+}
