@@ -71,13 +71,15 @@ app.get('/api/history', async (req, res) => {
 
 // Serve static files from client build in production
 if (process.env.NODE_ENV === 'production') {
-    const clientBuildPath = path.join(__dirname, '..', 'client', 'dist');
+    const clientBuildPath = path.join(__dirname, '..', 'frontend', 'dist');
     app.use(express.static(clientBuildPath));
 
     // SPA fallback — serve index.html for any non-API route
-    app.get('*', (req, res) => {
-        if (!req.path.startsWith('/api')) {
+    app.use((req, res, next) => {
+        if (!req.path.startsWith('/api') && req.method === 'GET') {
             res.sendFile(path.join(clientBuildPath, 'index.html'));
+        } else {
+            next();
         }
     });
 }
