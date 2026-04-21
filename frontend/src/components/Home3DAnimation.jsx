@@ -13,6 +13,8 @@ function OrbitingIcon({ text, radius, speed, offset, color }) {
         ref.current.position.z = Math.sin(t) * radius;
         // Make it face the center slightly, or just rotate
         ref.current.rotation.y += 0.01;
+        ref.current.rotation.x += 0.005;
+        ref.current.rotation.z += 0.003;
     });
 
     return (
