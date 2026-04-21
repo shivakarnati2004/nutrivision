@@ -63,15 +63,15 @@ export default function Landing() {
             whileInView={{ scale: 1, opacity: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center w-full px-4 sm:px-0"
           >
-            <Link to="/signup">
-              <button className="px-10 py-5 bg-primary-500 text-white rounded-full text-sm font-bold tracking-widest hover:scale-105 hover:bg-primary-400 transition-all shadow-2xl shadow-primary-500/20 active:scale-95">
+            <Link to="/signup" className="w-full sm:w-auto">
+              <button className="w-full px-6 py-4 md:px-10 md:py-5 bg-primary-500 text-white rounded-full text-xs md:text-sm font-bold tracking-widest hover:scale-105 hover:bg-primary-400 transition-all shadow-2xl shadow-primary-500/20 active:scale-95">
                 START YOUR TRANSFORMATION
               </button>
             </Link>
-            <Link to="/login">
-              <button className="px-10 py-5 rounded-full text-sm font-bold tracking-widest hover:scale-105 transition-all active:scale-95 border-2 border-dark-300 dark:border-white/20 text-dark-700 dark:text-white hover:border-primary-500 hover:text-primary-500">
+            <Link to="/login" className="w-full sm:w-auto">
+              <button className="w-full px-6 py-4 md:px-10 md:py-5 rounded-full text-xs md:text-sm font-bold tracking-widest hover:scale-105 transition-all active:scale-95 border-2 border-dark-300 dark:border-white/20 text-dark-700 dark:text-white hover:border-primary-500 hover:text-primary-500">
                 GO TO HOME
               </button>
             </Link>
@@ -91,7 +91,7 @@ export default function Landing() {
             <div className="absolute -inset-0.5 bg-gradient-to-r from-primary-500 via-accent-500 to-primary-500 rounded-3xl blur opacity-30 group-hover:opacity-60 transition duration-1000 group-hover:duration-200 animate-gradient-x"></div>
             
             {/* Glass Card */}
-            <div className="relative flex flex-col items-center bg-white/60 dark:bg-dark-900/60 backdrop-blur-2xl rounded-3xl p-8 border border-white/20 shadow-2xl">
+            <div className="relative flex flex-col items-center bg-white/60 dark:bg-dark-900/60 backdrop-blur-2xl rounded-3xl p-6 md:p-8 mx-4 md:mx-0 border border-white/20 shadow-2xl">
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary-400/10 rounded-full blur-2xl"></div>
               
               <div className="relative mb-5">

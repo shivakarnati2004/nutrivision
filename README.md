@@ -16,7 +16,10 @@
 </p>
 
 <p align="center">
-  <b>Snap a photo, type what you ate, or just speak — NutriVision gives you a full nutrition breakdown powered by Google Gemini AI with automatic model fallback.</b>
+  <b>🌟 LIVE APP: <a href="https://nutrivision-wnts.onrender.com">https://nutrivision-wnts.onrender.com</a> 🌟</b><br/><br/>
+  <i>✅ This application is fully deployed and operational.</i><br/>
+  <i>💻 <b>For the best experience, please use a PC.</b></i><br/>
+  <i>⏳ <b>Note:</b> The backend is deployed on a free Render instance. Please wait up to 50 seconds for the server to wake up and for the 3D graphics to load on your first visit!</i>
 </p>
 
 ---
@@ -145,7 +148,7 @@ Each analysis returns a detailed card with **calories, protein, carbs, fat, fibe
 |:---|:---|:---|
 | **Frontend** | React 19 + Vite 7 | Single-page app with HMR |
 | **Styling** | Tailwind CSS 3.4 | Utility-first responsive design |
-| **Animations** | Framer Motion + GSAP | Page transitions, scroll animations |
+| **Animations / 3D** | Framer Motion + GSAP + Spline | Page transitions, scroll animations, 3D graphics |
 | **Charts** | Recharts | Dashboard data visualization |
 | **Backend** | Express 5 + Node.js | RESTful API backend |
 | **AI** | Google Gemini (multi-model cascade) | Food recognition, nutrition extraction, chat |
