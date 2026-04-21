@@ -270,7 +270,7 @@ function BottomNav() {
         { title: 'Dashboard', to: '/dashboard', icon: <IoPieChartOutline />, gradientFrom: '#80FF72', gradientTo: '#7EE8FA' },
         { title: 'Raju', to: '/chatbot', icon: <IoChatbubblesOutline />, gradientFrom: '#a955ff', gradientTo: '#ea51ff' },
         { title: 'Profile', to: '/profile', icon: <IoPersonOutline />, gradientFrom: '#FF9966', gradientTo: '#FF5E62' },
-        { title: 'Entry', to: '/landing', icon: <IoCompassOutline />, gradientFrom: '#ffa9c6', gradientTo: '#f434e2' }
+        { title: 'Entry', to: '/landing', icon: <IoCompassOutline />, gradientFrom: '#10b981', gradientTo: '#3b82f6' }
     ];
 
     return (

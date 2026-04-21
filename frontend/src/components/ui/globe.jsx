@@ -16,8 +16,7 @@ const Globe = () => {
         `}
       </style>
       <div className="flex items-center justify-center h-screen scale-150">
-        <div
-          className="relative w-[250px] h-[250px] rounded-full overflow-hidden shadow-[0_0_20px_rgba(255,255,255,0.2),-5px_0_8px_#c3f4ff_inset,15px_2px_25px_#000_inset,-24px_-2px_34px_#c3f4ff99_inset,250px_0_44px_#00000066_inset,150px_0_38px_#000000aa_inset]"
+          className="relative w-[250px] h-[250px] rounded-full overflow-hidden shadow-[0_0_50px_rgba(16,185,129,0.3),-5px_0_15px_#c3f4ff_inset,15px_2px_40px_#000_inset,-24px_-2px_50px_#c3f4ff99_inset,250px_0_60px_#00000066_inset,150px_0_50px_#000000aa_inset] animate-pulse-slow"
           style={{
             backgroundImage: "url('https://pub-940ccf6255b54fa799a9b01050e6c227.r2.dev/globe.jpeg')",
             backgroundSize: "cover",

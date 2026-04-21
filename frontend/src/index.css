@@ -178,3 +178,12 @@ canvas {
 .animate-fadeOut {
   animation: fadeOutLabel 2s ease-out forwards;
 }
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.02); }
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}

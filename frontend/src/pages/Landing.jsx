@@ -24,34 +24,22 @@ export default function Landing() {
             </header>
 
             {/* ── 1. Hero 3D Scroll Section ── */}
-            <div className="relative w-full h-[250vh]">
+            <div className="relative w-full h-[300vh] bg-black">
                 <NutriScrollCanvas />
                 
-                {/* Hero Overlay Content */}
-                <div className="sticky top-0 w-full h-screen flex items-center justify-center pointer-events-none">
+                {/* Minimal Overlay for Hero Call to Action - Appears at the very start */}
+                <div className="fixed top-0 w-full h-screen flex items-end justify-center pb-20 pointer-events-none z-30">
                     <motion.div 
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        className="text-center px-4 max-w-4xl"
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 1 }}
+                        className="flex gap-4 pointer-events-auto"
                     >
-                        <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-dark-900 dark:text-white mb-6">
-                            FUTURE OF <span className="text-primary-500">HEALTH</span>
-                        </h1>
-                        <p className="text-xl md:text-2xl text-dark-500 dark:text-dark-400 font-medium mb-10">
-                            The world's most advanced AI nutrition companion.
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-4 justify-center pointer-events-auto">
-                            <Link to="/signup">
-                                <button className="px-10 py-5 bg-primary-500 text-white rounded-full text-sm font-bold tracking-widest hover:scale-105 shadow-2xl active:scale-95">
-                                    START NOW
-                                </button>
-                            </Link>
-                            <Link to="/try">
-                                <button className="px-10 py-5 rounded-full text-sm font-bold tracking-widest hover:scale-105 border-2 border-dark-900/10 dark:border-white/10 text-dark-700 dark:text-white hover:border-primary-500 transition-all">
-                                    TRY IT OUT
-                                </button>
-                            </Link>
-                        </div>
+                        <Link to="/signup">
+                            <button className="px-8 py-4 bg-primary-500 text-white rounded-full text-xs font-bold tracking-[0.2em] uppercase hover:scale-105 transition-all shadow-2xl active:scale-95">
+                                Start Journey
+                            </button>
+                        </Link>
                     </motion.div>
                 </div>
             </div>

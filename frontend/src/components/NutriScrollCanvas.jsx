@@ -157,11 +157,11 @@ export default function NutriScrollCanvas() {
                 className="text-center max-w-4xl absolute z-10 px-4"
               >
                 <div className="inline-block">
-                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white drop-shadow-lg">
-                    SEE YOUR FOOD
+                  <h1 className="text-4xl md:text-6xl lg:text-9xl font-black tracking-tighter text-white drop-shadow-2xl">
+                    FUTURE OF
                   </h1>
-                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white/90 drop-shadow-lg">
-                    DIFFERENTLY.
+                  <h1 className="text-4xl md:text-6xl lg:text-9xl font-black tracking-tighter text-primary-500 drop-shadow-2xl">
+                    HEALTH.
                   </h1>
                   <p className="text-base md:text-lg mt-4 text-white/80 font-light tracking-wide drop-shadow-md">
                     Every ingredient has a story to tell.
