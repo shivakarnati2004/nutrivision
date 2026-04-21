@@ -122,7 +122,14 @@ function HomePage() {
                 {tabs.map((tab) => (
                     <button
                         key={tab.id}
-                        onClick={() => { setActiveTab(tab.id); setError(''); }}
+                        onClick={() => { 
+                            if (!isAuthenticated && tab.id !== 'text') {
+                                setError(`Sign up for a free account to unlock ${tab.label} analysis!`);
+                                return;
+                            }
+                            setActiveTab(tab.id); 
+                            setError(''); 
+                        }}
                         className={`flex-1 py-3 px-4 rounded-xl text-sm font-medium transition-all duration-300 
                 border flex flex-col items-center gap-1
                 ${activeTab === tab.id ? 'tab-active' : 'tab-inactive'}`}
@@ -232,7 +239,7 @@ function BottomNav() {
     const hideOn = ['/login', '/signup', '/forgot-password', '/onboarding'];
     // Hide bottom nav on landing page for unauthenticated users
     const { isAuthenticated } = useAuth();
-    if (!isAuthenticated && location.pathname === '/') return null;
+    if (!isAuthenticated && (location.pathname === '/' || location.pathname === '/try')) return null;
     if (hideOn.some(path => location.pathname.startsWith(path))) return null;
 
     const navItems = [
@@ -265,6 +272,7 @@ function AppContent() {
                      isAuthenticated ? <AppLayout><HomePage /></AppLayout> : <Landing />
                 } />
                 <Route path="/landing" element={<Landing />} />
+                <Route path="/try" element={<AppLayout><HomePage /></AppLayout>} />
                 <Route path="/dashboard" element={
                     <ProtectedRoute>
                         <AppLayout><Dashboard /></AppLayout>

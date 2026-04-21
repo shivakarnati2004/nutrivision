@@ -70,9 +70,9 @@ export default function Landing() {
                 START YOUR TRANSFORMATION
               </button>
             </Link>
-            <Link to="/login" className="w-full sm:w-auto">
+            <Link to="/try" className="w-full sm:w-auto">
               <button className="w-full px-6 py-4 md:px-10 md:py-5 rounded-full text-xs md:text-sm font-bold tracking-widest hover:scale-105 transition-all active:scale-95 border-2 border-dark-300 dark:border-white/20 text-dark-700 dark:text-white hover:border-primary-500 hover:text-primary-500">
-                GO TO HOME
+                TRY NUTRIVISION
               </button>
             </Link>
           </motion.div>
